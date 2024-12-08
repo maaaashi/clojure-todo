@@ -1,6 +1,9 @@
-(ns todo.core)
+(ns todo.core
+  (:require [todo.http :as http]))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(defn get-todo-titles
+  []
+  (let [{:keys [body]} (http/get-todos)]
+    (map :title body)))
+
+(get-todo-titles)
