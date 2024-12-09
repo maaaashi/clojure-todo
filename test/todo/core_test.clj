@@ -1,12 +1,16 @@
 (ns todo.core-test
   (:require [clojure.test :as t]
             [todo.core :as sut]
-            [todo.http :as http]))
+            [todo.http :as http]
+            [mockfn.macros :as mockfn]
+            [mockfn.matchers :as matchers]))
 
 
-(t/deftest get-todo-titles-test
-  (t/testing "Todoのタイトルを取得できる"
-    (let [todos [{:id 1 :title "朝食を食べる" :completed false}
-                 {:id 2 :title "仕事に行く" :completed false}]]
-      (with-redefs [http/get-todos (fn [] {:status 200 :body todos})]
-        (t/is (= (sut/get-todo-titles) ["朝食を食べる" "仕事に行く"]))))))
+(t/deftest get-todo-titles-test2
+  (t/testing "特定のTodoのタイトルを取得でき、http/get-todoが呼ばれている"
+    (mockfn/verifying
+     [(http/get-todo 1) {:status 200 :body {:id 1 :title "朝食を食べる" :completed false}} (matchers/exactly 2)
+      (http/get-todo 2) {:status 200 :body {:id 1 :title "仕事に行く" :complated true}} (matchers/exactly 1)]
+     (t/is (= (sut/get-todo-title 1) "朝食を食べる"))
+     (t/is (= (sut/get-todo-title 2) "仕事に行く")))))
+
