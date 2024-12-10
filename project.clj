@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [nubank/mockfn "0.7.0"]
                  [ring/ring-core "1.13.0"]
-                 [ring/ring-jetty-adapter "1.13.0"]]
+                 [ring/ring-jetty-adapter "1.13.0"]
+                 [com.github.seancorfield/next.jdbc "1.3.967"]]
   :main todo.core
   :repl-options {:init-ns todo.core})
