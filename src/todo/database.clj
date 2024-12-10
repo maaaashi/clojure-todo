@@ -1,5 +1,5 @@
 (ns todo.database
-  (:require '[next.jdbc :as jdbc]))
+  (:require [next.jdbc :as jdbc]))
 
 (def db-spec
   {:dbtype "postgresql"
