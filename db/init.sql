@@ -1,8 +1,9 @@
+-- テーブル作成
 create table todos (
-  id int primary key not null AUTO_INCREMENT,
+  id serial primary key,
   title text not null,
   completed boolean not null
 );
 
--- テストデータとして1件入れておく
+-- テストデータ挿入
 insert into todos (title, completed) values ('朝食を食べる', false);

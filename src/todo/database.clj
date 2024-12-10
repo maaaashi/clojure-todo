@@ -1,5 +1,5 @@
 (ns todo.database
-  (require '[next.jdbc :as jdbc]))
+  (:require '[next.jdbc :as jdbc]))
 
 (def db-spec
   {:dbtype "postgresql"
@@ -14,3 +14,5 @@
 (defn select-todos
   []
   (jdbc/execute! db ["SELECT * FROM todos"]))
+
+(select-todos)

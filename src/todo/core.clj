@@ -1,6 +1,7 @@
 (ns todo.core
   (:require [todo.http :as http]
-            [ring.adapter.jetty :as jetty]))
+            [ring.adapter.jetty :as jetty]
+            [next.jdbc :as jdbc]))
 
 (defn get-todo-titles
   []
@@ -29,3 +30,20 @@
   (fn [request]
     (println "Request received:" request)
     (handler request)))
+
+
+(def db-spec
+  {:dbtype "postgresql"
+   :dbname "todo"
+   :host "127.0.0.1"
+   :port 5432
+   :user "todo-user"
+   :password "todo-password"})
+
+(def db (jdbc/get-datasource db-spec))
+
+(defn select-todos
+  []
+  (jdbc/execute! db ["SELECT * FROM todos"]))
+
+(select-todos)

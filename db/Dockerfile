@@ -1,4 +1,4 @@
-FROM postgreql:latest
+FROM postgres:latest
 
 ENV POSTGRES_DB=todo
 ENV POSTGRES_USER=todo-user
