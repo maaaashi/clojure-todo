@@ -24,7 +24,7 @@
 
 (defroutes handler'
   (POST "/v1/todos" req post-todos)
-  (GET "/v1/todos" req get-todos)
+  (GET "/v1/todos" [] get-todos)
   (GET "/v1/todos/:id" [id] (get-todo id))
   (PUT "/v1/todos/:id/:item" [id item] (put-todo id item))
   (DELETE "/v1/todos/:id" [id] (delete-todo id))
