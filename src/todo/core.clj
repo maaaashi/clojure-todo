@@ -3,24 +3,17 @@
             [ring.adapter.jetty :as jetty]
             [next.jdbc :as jdbc]))
 
-(defn get-todo-titles
+(defn get-todos
   []
   (let [{:keys [body]} (http/get-todos)]
     (map :title body)))
 
-(defn get-todo-title
-  [x]
-  (let [{:keys [body]} (http/get-todo x)]
-    (:title body)))
-
-(get-todo-titles)
 
 (defn handler
-  [request]
-  (println request)
-  {:status 200
-   :headers {"Content-Type" "text/plain"}
-   :body "Hello, World!"})
+  [{:keys [uri request-method]}]
+  (condp = uri
+    "/todos" (condp = request-method
+               :get (get-todos))))
 
 (defn -main []
   (println "アプリケーションを起動します")
