@@ -14,5 +14,11 @@
 
 (defn get-todos
   []
-  (jdbc/execute! db ["SELECT t.id, t.title, t.completed FROM todos t"]
+  (jdbc/execute! db ["SELECT * FROM todos"]
                  {:builder-fn rs/as-unqualified-lower-maps}))
+
+(defn get-todo
+  [id]
+  (-> (jdbc/execute! db ["SELECT * FROM todos WHERE id = ?" (Integer/parseInt id)]
+                     {:builder-fn rs/as-unqualified-lower-maps})
+      (first)))

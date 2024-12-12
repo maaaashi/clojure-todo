@@ -3,7 +3,7 @@
             [todo.driver :as driver]))
 
 (defn get-todo [id]
-  (res/response {:id 1 :title "朝食を食べる" :completed false}))
+  (res/response (driver/get-todo id)))
 
 (defn get-todos [req]
   (-> (driver/get-todos)
