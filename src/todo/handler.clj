@@ -3,7 +3,8 @@
             [todo.driver :as driver]))
 
 (defn get-todo [id]
-  (res/response (driver/find-todo id)))
+  (-> (driver/find-todo id)
+      (res/response)))
 
 (defn get-todos [req]
   (-> (driver/get-todos)
@@ -11,7 +12,8 @@
 
 (defn post-todos [req]
   (let [{:keys [title completed]} (get-in req [:body])]
-    (res/response {:id 1 :title title :completed completed})))
+    (driver/insert-todo title completed)
+    (res/response {:message "Success"})))
 
 (defn put-todo [id item]
   (res/response {:id 1 :title "朝食を食べる" :completed false}))

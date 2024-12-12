@@ -22,3 +22,7 @@
   (-> (jdbc/execute! db ["SELECT * FROM todos WHERE id = ?" (Integer/parseInt id)]
                      {:builder-fn rs/as-unqualified-lower-maps})
       (first)))
+
+(defn insert-todo
+  [title completed]
+  (-> (jdbc/execute! db ["INSERT INTO todos (title, completed) VALUES (?, ?)" title completed])))
