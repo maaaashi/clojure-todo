@@ -16,10 +16,10 @@ content-type: application/json
 }
 
 ### Create a new todo
-PUT {{url}}/v1/todos
+PUT {{url}}/v1/todos/5
 content-type: application/json
 
 {
-  "title": "TestTitle",
-  "completed": false
+  "title": "更新！",
+  "completed": true
 }
