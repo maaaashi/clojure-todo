@@ -19,10 +19,14 @@
 
 (defn find-todo
   [id]
-  (-> (jdbc/execute! db ["SELECT * FROM todos WHERE id = ?" (Integer/parseInt id)]
+  (-> (jdbc/execute! db
+                     ["SELECT * FROM todos WHERE id = ?" (Integer/parseInt id)]
                      {:builder-fn rs/as-unqualified-lower-maps})
       (first)))
 
 (defn insert-todo
   [title completed]
-  (-> (jdbc/execute! db ["INSERT INTO todos (title, completed) VALUES (?, ?)" title completed])))
+  (-> (jdbc/execute! db
+                     ["INSERT INTO todos (title, completed) VALUES (?, ?) RETURNING id, title, completed" title completed]
+                     {:builder-fn rs/as-unqualified-lower-maps})
+      (first)))

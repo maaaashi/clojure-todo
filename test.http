@@ -1,0 +1,16 @@
+@url = http://localhost:3000
+
+### Get all todos
+GET {{url}}/v1/todos
+
+### Get a todo by id
+GET {{url}}/v1/todos/1
+
+### Create a new todo
+POST {{url}}/v1/todos
+content-type: application/json
+
+{
+  "title": "TestTitle",
+  "completed": false
+}

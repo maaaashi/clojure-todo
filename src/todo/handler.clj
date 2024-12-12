@@ -12,8 +12,8 @@
 
 (defn post-todos [req]
   (let [{:keys [title completed]} (get-in req [:body])]
-    (driver/insert-todo title completed)
-    (res/response {:message "Success"})))
+    (-> (driver/insert-todo title completed)
+        (res/response))))
 
 (defn put-todo [id item]
   (res/response {:id 1 :title "朝食を食べる" :completed false}))
