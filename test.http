@@ -14,3 +14,12 @@ content-type: application/json
   "title": "TestTitle",
   "completed": false
 }
+
+### Create a new todo
+PUT {{url}}/v1/todos
+content-type: application/json
+
+{
+  "title": "TestTitle",
+  "completed": false
+}

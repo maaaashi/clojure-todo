@@ -30,3 +30,17 @@
                      ["INSERT INTO todos (title, completed) VALUES (?, ?) RETURNING id, title, completed" title completed]
                      {:builder-fn rs/as-unqualified-lower-maps})
       (first)))
+
+(defn update-todo-title
+  [id title]
+  (-> (jdbc/execute! db
+                     ["UPDATE todos SET title = ? WHERE id = ? RETURNING id, title, completed" title (Integer/parseInt id)]
+                     {:builder-fn rs/as-unqualified-lower-maps})
+      (first)))
+
+(defn update-todo-completed
+  [id completed]
+  (-> (jdbc/execute! db
+                     ["UPDATE todos SET completed = ? WHERE id = ? RETURNING id, title, completed" completed (Integer/parseInt id)]
+                     {:builder-fn rs/as-unqualified-lower-maps})
+      (first)))
