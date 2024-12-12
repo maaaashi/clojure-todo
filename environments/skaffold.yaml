@@ -4,10 +4,10 @@ metadata:
   name: clojure-todo-api
 build:
   artifacts:
-    - image: docker-registry.uzabase.com/robin/clojure-todo-api
-      context: ../../clojure-todo-api
+    - image: clojure-todo-api
+      context: ../app
       docker:
-        dockerfile: app/Dockerfile
+        dockerfile: ./Dockerfile
   local:
     push: false
     useBuildkit: true
@@ -16,50 +16,3 @@ manifests:
     releases:
       - name: clojure-todo-api
         chartPath: app/helm/deployment
-        setValueTemplates:
-          image: "{{ .IMAGE_FULLY_QUALIFIED_docker_registry_uzabase_com_robin_status_analysis_of_recruitment_api }}"
-          db:
-            user: '{{ default "developer" .DB_USER }}'
-            password: '{{ default "developer" .DB_PASSWORD }}'
-            host: '{{ default "status-analysis-of-recruitment-db-svc" .DB_HOST }}'
-            port: "{{ default 13100 .DB_PORT }}"
-profiles:
-  - name: with-db
-    activation:
-      - command: dev
-      - command: run
-      - command: delete
-    patches:
-      - op: add
-        path: /manifests/helm/releases/-
-        value:
-          chartPath: ../library/postgresql/helm
-          name: status-analysis-of-recruitment-db
-          setValues:
-            name: status-analysis-of-recruitment-db
-            port: 13100
-      - op: add
-        path: /manifests/helm/releases/-
-        value:
-          chartPath: db/helm
-          name: status-analysis-of-recruitment-configmap
-      - op: add
-        path: /manifests/helm/releases/-
-        value:
-          chartPath: app/helm/secret
-          name: status-analysis-of-recruitment-secret
-  - name: local
-    activation:
-      - command: dev
-    patches:
-      - op: remove
-        path: /build
-      - op: remove
-        path: /manifests/helm/releases/0
-  - name: with-external-secret
-    patches:
-      - op: add
-        path: /manifests/helm/releases/-
-        value:
-          chartPath: app/helm/external-secret
-          name: clojure-todo-api-external-secret
