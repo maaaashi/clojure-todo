@@ -37,3 +37,7 @@
                      ["UPDATE todos SET title = ?, completed = ? WHERE id = ? RETURNING id, title, completed" title completed (Integer/parseInt id)]
                      {:builder-fn rs/as-unqualified-lower-maps})
       (first)))
+
+(defn delete-todo
+  [id]
+  (jdbc/execute! db ["DELETE FROM todos WHERE id = ?" (Integer/parseInt id)]))

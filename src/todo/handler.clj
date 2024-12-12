@@ -21,4 +21,5 @@
         (res/response))))
 
 (defn delete-todo [id]
-  (res/response {:id 1 :title "朝食を食べる" :completed false}))
+  (driver/delete-todo id)
+  (res/response {:message "Deleted"}))

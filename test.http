@@ -15,7 +15,7 @@ content-type: application/json
   "completed": false
 }
 
-### Create a new todo
+### Update todo
 PUT {{url}}/v1/todos/5
 content-type: application/json
 
@@ -23,3 +23,6 @@ content-type: application/json
   "title": "更新！",
   "completed": true
 }
+
+### Delete todo
+DELETE {{url}}/v1/todos/3
