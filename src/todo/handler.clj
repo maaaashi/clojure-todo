@@ -3,7 +3,7 @@
             [todo.driver :as driver]))
 
 (defn get-todo [id]
-  (res/response (driver/get-todo id)))
+  (res/response (driver/find-todo id)))
 
 (defn get-todos [req]
   (-> (driver/get-todos)
