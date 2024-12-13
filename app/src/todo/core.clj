@@ -7,7 +7,7 @@
             [todo.handler :as handler]))
 
 (defroutes handler'
-  (POST "/v1/todos" req handler/post-todos)
+  (POST "/v1/todos" req (handler/post-todos req))
   (GET "/v1/todos" [] handler/get-todos)
   (GET "/v1/todos/:id" [id] (handler/get-todo id))
   (PUT "/v1/todos/:id" [id :as req] (handler/put-todo req id))
