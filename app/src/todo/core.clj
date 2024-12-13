@@ -19,12 +19,19 @@
 (defn- wrap-json-logging
   [handler]
   (fn [req]
-    (let [uri (get req :uri)
-          method (get req :request-method)
+    (let [current-timestamp (-> (java.time.Instant/now)
+                                (.toString))]
+      (log/info (json/write-str {:type "request"
+                                 :uri (:uri req)
+                                 :method (:request-method req)
+                                 :timestamp current-timestamp})))
+    (let [response (handler req)
           current-timestamp (-> (java.time.Instant/now)
                                 (.toString))]
-      (log/info (json/write-str {:uri uri :method method :current-timestamp current-timestamp})))
-    (handler req)))
+      (log/info (json/write-str {:type "response"
+                                 :status (:status response)
+                                 :timestamp current-timestamp}))
+      response)))
 
 (def handler
   (-> handler'
