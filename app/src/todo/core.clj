@@ -14,9 +14,20 @@
   (DELETE "/v1/todos/:id" [id] (handler/delete-todo id))
   (route/not-found (res/response {:message "Not Found"})))
 
+(defn- wrap-http-logging
+  [handler]
+  (fn [req]
+    (let [uri (get req :uri)
+          method (get req :request-method)
+          current-timestamp (-> (java.time.Instant/now)
+                                (.toString))]
+      (println {:uri uri :method method :current-timestamp current-timestamp}))
+    (handler req)))
+
 (def handler
   (-> handler'
       (wrap-json-body {:keywords? true})
+      (wrap-http-logging)
       (wrap-json-response)))
 
 (defn -main []
