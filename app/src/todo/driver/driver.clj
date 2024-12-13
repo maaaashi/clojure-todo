@@ -1,4 +1,4 @@
-(ns todo.driver
+(ns todo.driver.driver
   (:require [next.jdbc :as jdbc]
             [next.jdbc.result-set :as rs]))
 
