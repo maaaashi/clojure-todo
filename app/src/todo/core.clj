@@ -4,7 +4,9 @@
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [compojure.core :refer [defroutes GET POST PUT DELETE]]
             [compojure.route :as route]
-            [todo.handler :as handler]))
+            [todo.handler :as handler]
+            [clojure.data.json :as json]
+            [clojure.tools.logging :as log]))
 
 (defroutes handler'
   (POST "/v1/todos" req (handler/post-todos req))
@@ -14,20 +16,20 @@
   (DELETE "/v1/todos/:id" [id] (handler/delete-todo id))
   (route/not-found (res/response {:message "Not Found"})))
 
-(defn- wrap-http-logging
+(defn- wrap-json-logging
   [handler]
   (fn [req]
     (let [uri (get req :uri)
           method (get req :request-method)
           current-timestamp (-> (java.time.Instant/now)
                                 (.toString))]
-      (println {:uri uri :method method :current-timestamp current-timestamp}))
+      (log/info (json/write-str {:uri uri :method method :current-timestamp current-timestamp})))
     (handler req)))
 
 (def handler
   (-> handler'
       (wrap-json-body {:keywords? true})
-      (wrap-http-logging)
+      (wrap-json-logging)
       (wrap-json-response)))
 
 (defn -main []
