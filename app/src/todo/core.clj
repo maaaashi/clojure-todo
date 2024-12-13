@@ -4,18 +4,14 @@
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [compojure.core :refer [defroutes GET POST PUT DELETE]]
             [compojure.route :as route]
-            [todo.handler.handler.get-todo :as gt]
-            [todo.handler.handler.get-todos :as gts]
-            [todo.handler.handler.post-todo :as pot]
-            [todo.handler.handler.put-todo :as pt]
-            [todo.handler.handler.delete-todo :as dt]))
+            [todo.handler :as handler]))
 
 (defroutes handler'
-  (POST "/v1/todos" req pot/post-todos)
-  (GET "/v1/todos" [] gts/get-todos)
-  (GET "/v1/todos/:id" [id] (gt/get-todo id))
-  (PUT "/v1/todos/:id" [id :as req] (pt/put-todo req id))
-  (DELETE "/v1/todos/:id" [id] (dt/delete-todo id))
+  (POST "/v1/todos" req handler/post-todos)
+  (GET "/v1/todos" [] handler/get-todos)
+  (GET "/v1/todos/:id" [id] (handler/get-todo id))
+  (PUT "/v1/todos/:id" [id :as req] (handler/put-todo req id))
+  (DELETE "/v1/todos/:id" [id] (handler/delete-todo id))
   (route/not-found (res/response {:message "Not Found"})))
 
 (defn- wrap-http-logging
