@@ -42,6 +42,10 @@
         response))
     ))
 
+(defn wrap-error-handling
+  [handler]
+  (fn [req]))
+
 (def handler
   (-> handler'
       (wrap-json-body {:keywords? true})
