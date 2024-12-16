@@ -13,6 +13,7 @@
                  [org.postgresql/postgresql "42.7.4"]
                  [compojure "1.7.1"]
                  [org.clojure/data.json "2.5.1"]
-                 [org.clojure/tools.logging "1.3.0"]]
+                 [org.clojure/tools.logging "1.3.0"]
+                 [ring-logger "1.1.1"]]
   :main todo.core
   :repl-options {:init-ns todo.core})
