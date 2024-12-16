@@ -47,11 +47,24 @@
 
 (defn wrap-error-handling
   [handler]
-  (fn [req]))
+  (fn [req]
+    (try
+      (handler req)
+      (catch clojure.lang.ExceptionInfo e
+        (println "----------------------------")
+        (println e)
+        (println "----------------------------")
+        (res/status {:message "error"} 400))
+      (catch Exception e
+        (println "☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆")
+        (println e)
+        (println "☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆")
+        (res/status {:message "error"} 502)))))
 
 (def handler
   (-> handler'
       (logger/wrap-log-response)
+      (wrap-error-handling)
       (wrap-json-response)
       (wrap-json-body {:keywords? true})
       (logger/wrap-log-request-start)))
