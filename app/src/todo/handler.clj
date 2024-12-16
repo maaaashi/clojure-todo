@@ -6,10 +6,9 @@
   (-> (driver/get-todos)
       (res/response)))
 
-; もしtodoがなければex-infoの例外を投げる
 (defn get-todo [id]
   (-> (driver/find-todo id)
-      (or (throw (ex-info "Not found" {:status 404})))
+      (or (throw (ex-info (str "Todo id: " id ", Not found") {:status 404})))
       (res/response)))
 
 (defn post-todos [req]

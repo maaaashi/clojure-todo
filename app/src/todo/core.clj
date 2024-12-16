@@ -51,15 +51,12 @@
     (try
       (handler req)
       (catch clojure.lang.ExceptionInfo e
-        (println "----------------------------")
-        (println e)
-        (println "----------------------------")
-        (res/status {:message "error"} 400))
+        (let [{:keys [status]} (ex-data e)
+              message (ex-message e)]
+          (res/status (res/response {:message message}) status)))
       (catch Exception e
-        (println "☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆")
-        (println e)
-        (println "☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆☆")
-        (res/status {:message "error"} 502)))))
+        (let [message (str "Internal Server Error: " (.getMessage e))]
+          (res/status (res/response {:message message}) 500))))))
 
 (def handler
   (-> handler'
