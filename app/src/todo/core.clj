@@ -5,8 +5,8 @@
             [compojure.core :refer [defroutes GET POST PUT DELETE]]
             [compojure.route :as route]
             [todo.handler :as handler]
-            [clojure.data.json :as json]
-            [clojure.tools.logging :as log]
+            ;; [clojure.data.json :as json]
+            ;; [clojure.tools.logging :as log]
             [ring.logger :as logger]))
 
 (defroutes handler'
@@ -17,33 +17,33 @@
   (DELETE "/v1/todos/:id" [id] (handler/delete-todo id))
   (route/not-found (res/response {:message "Not Found"})))
 
-(defn- wrap-log-request
-  [handler]
-  (fn [req]
-    (let [current-timestamp (-> (java.time.Instant/now)
-                                (.toString))]
-      (log/info (json/write-str {:type "request"
-                                 :timestamp current-timestamp
-                                 :request_uri (:uri req)
-                                 :request_method (:request-method req)})))
-    (handler req)))
+;; (defn- wrap-log-request
+;;   [handler]
+;;   (fn [req]
+;;     (let [current-timestamp (-> (java.time.Instant/now)
+;;                                 (.toString))]
+;;       (log/info (json/write-str {:type "request"
+;;                                  :timestamp current-timestamp
+;;                                  :request_uri (:uri req)
+;;                                  :request_method (:request-method req)})))
+;;     (handler req)))
 
-(defn- wrap-log-response
-  [handler]
-  (fn [req]
-    (let [start-time (System/nanoTime)
-          response (handler req)
-          end-time (System/nanoTime)
-          response-time (/ (- end-time start-time) 1e6)
-          current-timestamp (-> (java.time.Instant/now)
-                                (.toString))]
-      (log/info (json/write-str {:type "response"
-                                 :timestamp current-timestamp
-                                 :status (:status response)
-                                 :request_uri (:uri req)
-                                 :request_method (:request-method req)
-                                 :response_time response-time}))
-      response)))
+;; (defn- wrap-log-response
+;;   [handler]
+;;   (fn [req]
+;;     (let [start-time (System/nanoTime)
+;;           response (handler req)
+;;           end-time (System/nanoTime)
+;;           response-time (/ (- end-time start-time) 1e6)
+;;           current-timestamp (-> (java.time.Instant/now)
+;;                                 (.toString))]
+;;       (log/info (json/write-str {:type "response"
+;;                                  :timestamp current-timestamp
+;;                                  :status (:status response)
+;;                                  :request_uri (:uri req)
+;;                                  :request_method (:request-method req)
+;;                                  :response_time response-time}))
+;;       response)))
 
 (defn wrap-error-handling
   [handler]
@@ -51,10 +51,10 @@
 
 (def handler
   (-> handler'
-      (wrap-log-response)
+      (logger/wrap-log-response)
       (wrap-json-response)
       (wrap-json-body {:keywords? true})
-      (wrap-log-request)))
+      (logger/wrap-log-request-start)))
 
 (defn -main []
   (jetty/run-jetty handler {:port 3000}))
